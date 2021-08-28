@@ -1,0 +1,15 @@
+server:
+  servlet:
+    context-path: /transaction
+
+config:
+  mysql:
+    db: flash_transaction
+
+spring:
+  boot:
+    admin:
+      client:
+        username: yueliminvc@outlook.com
+        password: yueliminvc@outlook.com
+        url: http://127.0.0.1:8849

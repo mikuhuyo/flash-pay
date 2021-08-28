@@ -1,0 +1,20 @@
+server:
+  servlet:
+    context-path: /user
+
+config:
+  mysql:
+    db: flash_user
+
+spring:
+  boot:
+    admin:
+      client:
+        username: yueliminvc@outlook.com
+        password: yueliminvc@outlook.com
+        url: http://127.0.0.1:8849
+
+sms:
+  name: "sms"
+  url: "http://127.0.0.1:56085/tencent"
+  effectiveTime: "300"

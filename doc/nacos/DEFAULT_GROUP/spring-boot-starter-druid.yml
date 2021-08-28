@@ -1,0 +1,53 @@
+config:
+  mysql:
+    username: root
+    password: yueliminvc@outlook.com
+    ip: 192.168.158.160
+    port: 3306
+    db: data
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${config.mysql.ip}:${config.mysql.port}/${config.mysql.db}?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+    username: ${config.mysql.username}
+    password: ${config.mysql.password}
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filter:
+        stat:
+          slow-sql-millis: 1
+          log-slow-sql: true
+      filters: config,stat,wall,log4j2
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.css,*.ioc,/druid/*"
+        session-stat-enable: false
+        session-stat-max-count: 1000
+        principal-cookie-name: admin
+        principal-session-name: admin
+        profile-enable: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        # 白名单
+        allow: 192.168.158.156,127.0.0.1
+        # 黑名单
+        deny: 192.168.158.1
+        reset-enable: false
+        login-password: admin
+        login-username: admin
+      aop-patterns: com.flashpay.*.service.*

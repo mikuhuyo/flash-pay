@@ -1,0 +1,32 @@
+# 配置Tomcat头信息
+server:
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+  servlet:
+    context-path: /
+  use-forward-headers: true
+  port: 8849
+
+# HTTP格式配置
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  messages:
+    encoding: UTF-8
+  application:
+    name: flash-pay-monitor
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: 'off'
+  security:
+    user:
+      name: yueliminvc@outlook.com
+      password: yueliminvc@outlook.com
+
+# 日志配置
+logging:
+  config: classpath:log4j2.xml

@@ -1,0 +1,74 @@
+# 路由规则
+zuul:
+  retryable: true
+  add-host-header: true
+  ignoredServices: "*"
+  sensitiveHeaders: "*"
+  routes:
+    flash-pay-operation-application:
+      path: /operation/**
+      stripPrefix: false
+    flash-pay-merchant-application:
+      path: /merchant/**
+      stripPrefix: false
+    flash-pay-uaa-service:
+      path: /uaa/**
+      stripPrefix: false
+    flash-pay-transaction-service:
+      path: /transaction/**
+      stripPrefix: false
+    flash-pay-user-service:
+      path: /user/**
+      stripPrefix: false
+
+spring:
+  boot:
+    admin:
+      client:
+        username: yueliminvc@outlook.com
+        password: yueliminvc@outlook.com
+        url: http://127.0.0.1:8849
+
+feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+  hystrix:
+    # feign 熔断机制是否开启
+    enabled: true
+  # 支持压缩的mime types
+  compression:
+    # 请求压缩
+    request:
+      enabled: true
+      # 配置压缩支持的MIME TYPE
+      mime-types: ["text/xml","application/xml","application/json"]
+      min-request-size: 2048
+    # 响应压缩
+    response:
+      enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            # 设置熔断超时时间  default 1000
+            timeoutInMilliseconds: 93000
+        timeout:
+          # 打开超时熔断功能 default true
+          enabled: true
+ribbon:
+  nacos:
+    enabled: true
+  # 设置连接超时时间 default 2000
+  ConnectTimeout: 3000
+  # 设置读取超时时间  default 5000
+  ReadTimeout: 20000
+  # 对所有操作请求都进行重试  default false
+  OkToRetryOnAllOperations: false
+  # 切换实例的重试次数  default 1
+  MaxAutoRetriesNextServer: 1
+  # 对当前实例的重试次数 default 0
+  MaxAutoRetries: 1

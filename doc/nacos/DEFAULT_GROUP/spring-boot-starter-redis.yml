@@ -1,0 +1,23 @@
+config:
+  redis:
+    ip: 192.168.158.160
+    port: 6379
+    password: yueliminvc@outlook.com
+    database: 1
+
+spring:
+  cache:
+    type: REDIS
+  redis:
+    host: ${config.redis.ip}
+    password: ${config.redis.password}
+    port: ${config.redis.port}
+    database: ${config.redis.database}
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait: 3000ms
+    shutdown-timeout: 3000ms

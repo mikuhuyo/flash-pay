@@ -1,0 +1,16 @@
+hystrix:
+  threadpool:
+    default:
+      # 并发执行的最大线程数, 默认10
+      coreSize: 1000
+      # BlockingQueue的最大队列数
+      maxQueueSize: 1000
+      # 即使maxQueueSize没有达到, 达到queueSizeRejectionThreshold该值后, 请求也会被拒绝
+      queueSizeRejectionThreshold: 500
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            # 熔断超时 ribbon和hystrix是同时生效的, 哪个值小哪个生效
+            timeoutInMilliseconds: 120000
