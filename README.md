@@ -177,11 +177,11 @@ Ps: 万万没想到写文档和注释是这么痛苦.
 
 ### 关注者
 
-[![Stargazers repo roster for @mikuhuyo/wanxin-p2p](https://reporoster.com/stars/mikuhuyo/flash-pay)](https://github.com/mikuhuyo/flash-pay/stargazers)
+[![Stargazers repo roster for @mikuhuyo/flash-pay](https://reporoster.com/stars/mikuhuyo/flash-pay)](https://github.com/mikuhuyo/flash-pay/stargazers)
 
 ### 收藏者
 
-[![Forkers repo roster for @mikuhuyo/wanxin-p2p](https://reporoster.com/forks/mikuhuyo/flash-pay)](https://github.com/mikuhuyo/flash-pay/network/members)
+[![Forkers repo roster for @mikuhuyo/flash-pay](https://reporoster.com/forks/mikuhuyo/flash-pay)](https://github.com/mikuhuyo/flash-pay/network/members)
 
 ## 整理不易-请这个b喝杯水?
 
