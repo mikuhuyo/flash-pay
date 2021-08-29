@@ -48,7 +48,7 @@ public class MerchantController {
     @Reference
     private ITransactionService iTransactionService;
 
-    @GetMapping(value = "/my/apps/{appId}/stores/{storeId}/app‐store‐qrcode")
+    @GetMapping(value = "/my/apps/{appId}/stores/{storeId}/app-store-qrcode")
     @ApiOperation("生成商户应用门店二维码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "商户应用id", required = true, dataType = "String", paramType = "path"),

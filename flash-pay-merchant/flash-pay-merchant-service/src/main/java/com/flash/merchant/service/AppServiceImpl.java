@@ -30,7 +30,7 @@ public class AppServiceImpl implements IAppService {
 
     @Override
     public Boolean queryAppInMerchant(String appId, Long merchantId) throws BusinessException {
-        return appMapper.selectCount(new LambdaQueryWrapper<App>().eq(App::getId, appId).eq(App::getMerchantId,merchantId)) > 0;
+        return appMapper.selectCount(new LambdaQueryWrapper<App>().eq(App::getAppId, appId).eq(App::getMerchantId,merchantId)) > 0;
     }
 
     @Override
