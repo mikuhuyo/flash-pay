@@ -1,6 +1,7 @@
 package com.flash.merchant.api;
 
 import com.flash.common.domain.BusinessException;
+import com.flash.common.domain.PageVO;
 import com.flash.merchant.api.dto.MerchantDto;
 import com.flash.merchant.api.dto.StaffDto;
 import com.flash.merchant.api.dto.StoreDto;
@@ -12,6 +13,27 @@ import com.flash.merchant.api.vo.MerchantDetailVo;
  * @since 11
  */
 public interface IMerchantService {
+    /**
+     * 查询门店是否在指定商户下
+     *
+     * @param storeId    门店id
+     * @param merchantId 商户id
+     * @return true-属于, false-不属于
+     * @throws BusinessException 自定义异常
+     */
+    Boolean queryStoreInMerchantId(Long storeId, Long merchantId) throws BusinessException;
+
+    /**
+     * 分页获取门店信息
+     *
+     * @param storeDto 门店查询条件
+     * @param page     页码
+     * @param size     每页的数据条数
+     * @return PageVO<StoreDto>
+     * @throws BusinessException 自定义异常
+     */
+    PageVO<StoreDto> queryStoreByPage(StoreDto storeDto, Integer page, Integer size) throws BusinessException;
+
     /**
      * 为门店设置管理员
      *

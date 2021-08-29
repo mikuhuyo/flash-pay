@@ -12,6 +12,16 @@ import java.util.List;
  */
 public interface IAppService {
     /**
+     * 查询应用是否属于某一个商户
+     *
+     * @param appId      应用id
+     * @param merchantId 商户id
+     * @return true 属于, false 不属于
+     * @throws BusinessException 自定义异常
+     */
+    Boolean queryAppInMerchant(String appId, Long merchantId) throws BusinessException;
+
+    /**
      * 根据应用id查询应用
      *
      * @param appId 应用id

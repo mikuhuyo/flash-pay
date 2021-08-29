@@ -1,8 +1,11 @@
 package com.flash.merchant.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.flash.common.domain.BusinessException;
 import com.flash.common.domain.CommonErrorCode;
+import com.flash.common.domain.PageVO;
 import com.flash.common.util.PhoneUtil;
 import com.flash.common.util.StringUtil;
 import com.flash.merchant.api.IMerchantService;
@@ -29,6 +32,8 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author yuelimin
  * @version 1.0.0
@@ -47,6 +52,31 @@ public class MerchantServiceImpl implements IMerchantService {
 
     @Reference
     private TenantService tenantService;
+
+    @Override
+    public Boolean queryStoreInMerchantId(Long storeId, Long merchantId) throws BusinessException {
+        return storeMapper.selectCount(new LambdaQueryWrapper<Store>().eq(Store::getId, storeId).eq(Store::getMerchantId, merchantId)) > 0;
+    }
+
+    @Override
+    public PageVO<StoreDto> queryStoreByPage(StoreDto storeDto, Integer page, Integer size) throws BusinessException {
+        LambdaQueryWrapper<Store> storeLambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        // 查询条件
+        if (storeDto != null && storeDto.getMerchantId() != null) {
+            storeLambdaQueryWrapper.eq(Store::getMerchantId, storeDto.getMerchantId());
+        }
+        if (storeDto != null && storeDto.getId() != null) {
+            storeLambdaQueryWrapper.eq(Store::getId, storeDto.getId());
+        }
+        if (storeDto != null && storeDto.getStoreName() != null) {
+            storeLambdaQueryWrapper.like(Store::getStoreName, storeDto.getStoreName());
+        }
+
+        IPage<Store> storeIPage = storeMapper.selectPage(new Page<Store>(page, size), storeLambdaQueryWrapper);
+        List<StoreDto> storeDtos = StoreConvert.INSTANCE.entityList2dtoList(storeIPage.getRecords());
+        return new PageVO<>(storeDtos, storeIPage.getTotal(), page, size);
+    }
 
     @Override
     public void bindStaffToStore(Long storeId, Long staffId) throws BusinessException {

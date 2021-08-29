@@ -5,6 +5,8 @@ import com.flash.merchant.entity.Store;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author yuelimin
  * @version 1.0.0
@@ -17,6 +19,8 @@ public interface StoreConvert {
     StoreDto entity2dto(Store store);
 
     Store dto2entity(StoreDto storeDto);
+
+    List<StoreDto> entityList2dtoList(List<Store> stores);
 }
 
 

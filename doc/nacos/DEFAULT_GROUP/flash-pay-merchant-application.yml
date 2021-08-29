@@ -37,3 +37,8 @@ minio:
   id: "990fa03243584e9cbe71e5cfa8524e31"
   ak: "JDJhJDEwJDFjaTVhSWVRMWpTbTFjcXdmUENkeC5ndDI5R2FHR2J1YUtVL1ROZ24wWUNLR1JESnBMTmg2"
   sk: "JDJhJDEwJDFjaTVhSWVRMWpTbTFjcXdmUENkeC5nUUw0RnJsRkxodVkzRWlkbXVJQ0NEc1ZYOWhoM2dL"
+
+flash-pay:
+  c2b:
+    subject: "%s商品"
+    body: "向%s付款"

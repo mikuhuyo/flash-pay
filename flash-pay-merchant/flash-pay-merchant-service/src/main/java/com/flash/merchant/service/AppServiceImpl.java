@@ -29,6 +29,11 @@ public class AppServiceImpl implements IAppService {
     private MerchantMapper merchantMapper;
 
     @Override
+    public Boolean queryAppInMerchant(String appId, Long merchantId) throws BusinessException {
+        return appMapper.selectCount(new LambdaQueryWrapper<App>().eq(App::getId, appId).eq(App::getMerchantId,merchantId)) > 0;
+    }
+
+    @Override
     public AppDto getAppById(String appId) throws BusinessException {
         return AppConvert.INSTANCE.entity2dto(appMapper.selectOne(new LambdaQueryWrapper<App>().eq(App::getAppId, appId)));
     }
