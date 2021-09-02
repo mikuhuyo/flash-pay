@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @ApiModel(value = "PayOrderDto", description = "")
 public class PayOrderDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -1932679425406365768L;
 
     private Long id;
 
