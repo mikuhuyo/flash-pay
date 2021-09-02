@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface PayChannelParamConvert {
 
-    PayChannelParamConvert INSTANCE= Mappers.getMapper(PayChannelParamConvert.class);
+    PayChannelParamConvert INSTANCE = Mappers.getMapper(PayChannelParamConvert.class);
 
     PayChannelParamDto entity2dto(PayChannelParam entity);
 

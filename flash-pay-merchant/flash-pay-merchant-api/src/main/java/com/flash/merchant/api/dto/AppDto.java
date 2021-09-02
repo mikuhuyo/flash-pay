@@ -1,9 +1,10 @@
 package com.flash.merchant.api.dto;
 
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @author yuelimin
@@ -11,7 +12,7 @@ import lombok.Data;
  * @since 1.8
  */
 @Data
-@ApiModel(value="AppDto", description="")
+@ApiModel(value = "AppDto", description = "")
 public class AppDto implements Serializable {
 
     private static final long serialVersionUID = 1L;

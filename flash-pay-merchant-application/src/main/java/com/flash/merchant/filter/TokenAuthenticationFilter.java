@@ -65,13 +65,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         // base64解码 后判断有没有当前租户的权限信息
         String json = EncryptUtil.decodeUTF8StringBase64(jsonToken);
         log.info("json令牌: {}", json);
-        Map<String, Object> tokenMap = JSONObject.parseObject(json, new TypeReference<Map<String, Object>>(){});
+        Map<String, Object> tokenMap = JSONObject.parseObject(json, new TypeReference<Map<String, Object>>() {
+        });
         log.info("tokenMap: {}", JSON.toJSONString(tokenMap));
 
         // 需注意payload的值是字符串需要再次转map
         String payload = (String) tokenMap.get("payload");
         log.info("paload: {}", payload);
-        Map<String, Object> payloadMap = JSONObject.parseObject(payload, new TypeReference<Map<String, Object>>(){});
+        Map<String, Object> payloadMap = JSONObject.parseObject(payload, new TypeReference<Map<String, Object>>() {
+        });
         log.info("payloadMap: {}", JSON.toJSONString(payloadMap));
 
         // 增加将当前登入用户信息放入requestAttribute

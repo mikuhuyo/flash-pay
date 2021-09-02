@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @Configuration
 public class RedisConfig {
     @Bean
-    public Cache cache(StringRedisTemplate redisTemplate){
+    public Cache cache(StringRedisTemplate redisTemplate) {
         return new RedisCache(redisTemplate);
     }
 }

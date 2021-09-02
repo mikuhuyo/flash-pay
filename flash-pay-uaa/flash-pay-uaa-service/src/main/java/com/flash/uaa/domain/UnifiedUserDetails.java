@@ -8,22 +8,18 @@ import java.util.*;
 public class UnifiedUserDetails implements UserDetails {
 
     private static final long serialVersionUID = 3957586021470480642L;
-
-    /**
-     * 用户的授权集合
-     */
-    protected List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
     /**
      * 用户名
      */
     private final String username;
-
     /**
      * 用户密码
      */
     private final String password;
-
+    /**
+     * 用户的授权集合
+     */
+    protected List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
     /**
      * 手机号
      */

@@ -7,22 +7,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationContextHelper implements ApplicationContextAware {
-	private static ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext;
 
-	public ApplicationContextHelper() {
-	}
+    public ApplicationContextHelper() {
+    }
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		ApplicationContextHelper.applicationContext = applicationContext;
-	}
+    public static Object getBean(String beanName) {
+        return applicationContext != null ? applicationContext.getBean(beanName) : null;
+    }
 
-	public static Object getBean(String beanName) {
-		return applicationContext != null ? applicationContext.getBean(beanName) : null;
-	}
+    public static <T> T getBean(Class<T> c) {
+        return applicationContext != null ? applicationContext.getBean(c) : null;
+    }
 
-	public static <T> T getBean(Class<T> c){
-		return applicationContext != null ? applicationContext.getBean(c) : null;
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        ApplicationContextHelper.applicationContext = applicationContext;
+    }
 }
 

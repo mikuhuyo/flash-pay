@@ -7,9 +7,9 @@ import java.util.Map;
 
 @Data
 public class LoginUser {
-	private String mobile;
-	private Map<String, Object> payload = new HashMap<>();
-	private String clientId;
-	private String username;
-	private Long tenantId;
+    private String mobile;
+    private Map<String, Object> payload = new HashMap<>();
+    private String clientId;
+    private String username;
+    private Long tenantId;
 }

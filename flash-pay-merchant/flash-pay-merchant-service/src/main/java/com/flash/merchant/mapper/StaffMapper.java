@@ -1,7 +1,7 @@
 package com.flash.merchant.mapper;
 
-import com.flash.merchant.entity.Staff;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.flash.merchant.entity.Staff;
 import org.springframework.stereotype.Repository;
 
 /**
