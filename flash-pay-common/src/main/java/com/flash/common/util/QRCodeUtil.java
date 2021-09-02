@@ -38,7 +38,7 @@ public class QRCodeUtil {
             // 二维码参数
             @SuppressWarnings("rawtypes")
             HashMap<EncodeHintType, Comparable> hints = new HashMap<>();
-            // 指定字符编码为“utf-8”
+            // 指定字符编码为"utf-8"
             hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
             // L M Q H四个纠错等级从低到高, 指定二维码的纠错等级为M
             // 纠错级别越高, 可以修正的错误就越多, 需要的纠错码的数量也变多, 相应的二维吗可储存的数据就会减少
