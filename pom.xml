@@ -17,6 +17,7 @@
         <module>flash-pay-user</module>
         <module>flash-pay-uaa</module>
         <module>flash-pay-transaction</module>
+        <module>flash-pay-payment-agent</module>
     </modules>
 
     <licenses>

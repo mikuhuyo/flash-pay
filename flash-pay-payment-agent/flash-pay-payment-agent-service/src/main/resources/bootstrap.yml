@@ -1,0 +1,60 @@
+server:
+  port: 56070
+
+# 自定义nacos配置
+nacos:
+  server:
+    ip: @pom.nacos.ip@
+    port: @pom.nacos.port@
+    namespace: @pom.nacos.namespace@
+
+spring:
+  application:
+    name: @project.artifactId@
+  main:
+    banner-mode: 'off'
+    allow-bean-definition-overriding: true
+  profiles:
+    active: @pom.profile.name@
+  cloud:
+    nacos:
+      config:
+        server-addr: ${nacos.server.ip}:${nacos.server.port}
+        namespace: ${nacos.server.namespace}
+        file-extension: yml
+        refresh-enabled: true
+        shared-configs: spring-boot-http.yml,spring-boot-starter-freemarker.yml,spring-boot-starter-rocketmq.yml
+      discovery:
+        server-addr: ${nacos.server.ip}:${nacos.server.port}
+        namespace: ${nacos.server.namespace}
+        cluster-name: DEFAULT
+        # 元数据, 用于权限服务实时获取各个服务的所有接口
+        metadata:
+          management.context-path: ${server.servlet.context-path:}${spring.mvc.servlet.path:}${management.endpoints.web.base-path:}
+
+dubbo:
+  scan:
+    # 扫描包
+    base-packages: com.flash
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://192.168.158.160:8848
+  application:
+    qos-port: -1
+  consumer:
+    check: false
+    timeout: 6000
+    retries: -1
+
+# 日志配置
+logging:
+  config: classpath:log4j2.xml
+
+info:
+  name: '@project.name@'
+  description: '@project.description@'
+  version: '@project.version@'
+  spring-boot-version: '@spring.boot.version@'
+  spring-cloud-version: '@spring.cloud.version@'

@@ -1,0 +1,11 @@
+server:
+  servlet:
+    context-path: /payment-receiver
+
+spring:
+  boot:
+    admin:
+      client:
+        username: yueliminvc@outlook.com
+        password: yueliminvc@outlook.com
+        url: http://127.0.0.1:8849
