@@ -54,7 +54,7 @@ CREATE TABLE `staff` (
   `MOBILE` varchar(50) DEFAULT NULL COMMENT '手机号(关联统一用户)',
   `STORE_ID` bigint(20) DEFAULT NULL COMMENT '员工所属门店',
   `LAST_LOGIN_TIME` datetime DEFAULT NULL COMMENT '最后一次登录时间',
-  `STAFF_STATUS` bit(1) DEFAULT NULL COMMENT '0表示禁用，1表示启用',
+  `STAFF_STATUS` bit(1) DEFAULT NULL COMMENT '0表示禁用, 1表示启用',
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE KEY `MERCHANT_ID` (`MERCHANT_ID`,`MOBILE`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -69,7 +69,7 @@ CREATE TABLE `store` (
   `STORE_NUMBER` bigint(20) DEFAULT NULL COMMENT '门店编号',
   `MERCHANT_ID` bigint(20) DEFAULT NULL COMMENT '所属商户',
   `PARENT_ID` bigint(20) DEFAULT NULL COMMENT '父门店',
-  `STORE_STATUS` bit(1) DEFAULT NULL COMMENT '0表示禁用，1表示启用',
+  `STORE_STATUS` bit(1) DEFAULT NULL COMMENT '0表示禁用, 1表示启用',
   `STORE_ADDRESS` varchar(50) DEFAULT NULL COMMENT '门店地址',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -160,7 +160,7 @@ CREATE TABLE `pay_order` (
   `SUBJECT` varchar(50) DEFAULT NULL COMMENT '商品标题',
   `BODY` varchar(256) DEFAULT NULL COMMENT '订单描述',
   `CURRENCY` varchar(50) DEFAULT NULL COMMENT '币种CNY',
-  `TOTAL_AMOUNT` int(11) DEFAULT NULL COMMENT '订单总金额，单位为分',
+  `TOTAL_AMOUNT` int(11) DEFAULT NULL COMMENT '订单总金额, 单位为分',
   `OPTIONAL` varchar(256) DEFAULT NULL COMMENT '用户自定义的参数,商户自定义数据',
   `ANALYSIS` varchar(256) DEFAULT NULL COMMENT '用于统计分析的数据,用户自定义',
   `EXTRA` varchar(512) DEFAULT NULL COMMENT '特定渠道发起时额外参数',
@@ -200,7 +200,7 @@ CREATE TABLE `payment_bill` (
   `refund_order_no` varchar(60) DEFAULT NULL COMMENT '退款单号',
   `refund_money` decimal(10,2) DEFAULT NULL COMMENT '退款金额',
   `platform_channel` varchar(50) NOT NULL COMMENT '原始支付渠道',
-  `trade_state` varchar(255) DEFAULT NULL COMMENT '交易状态：SUCCESS—支付成功，REFUND—转入退款，REVOKED—已撤销',
+  `trade_state` varchar(255) DEFAULT NULL COMMENT '交易状态: SUCCESS—支付成功, REFUND—转入退款, REVOKED—已撤销',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -265,7 +265,7 @@ CREATE TABLE `refund_order` (
   `PAY_CHANNEL_USER` varchar(50) DEFAULT NULL COMMENT '原始渠道用户标识,如微信openId,支付宝账号',
   `PAY_CHANNEL_USERNAME` varchar(50) DEFAULT NULL COMMENT '原始渠道用户姓名',
   `CURRENCY` varchar(50) DEFAULT NULL COMMENT '币种CNY',
-  `TOTAL_AMOUNT` int(11) DEFAULT NULL COMMENT '订单总金额，单位为分',
+  `TOTAL_AMOUNT` int(11) DEFAULT NULL COMMENT '订单总金额, 单位为分',
   `REFUND_AMOUNT` int(11) DEFAULT NULL COMMENT '退款金额,单位分',
   `OPTIONAL` varchar(256) DEFAULT NULL COMMENT '用户自定义的参数,商户自定义数据',
   `ANALYSIS` varchar(256) DEFAULT NULL COMMENT '用于统计分析的数据,用户自定义',
