@@ -24,7 +24,7 @@ spring:
         namespace: ${nacos.server.namespace}
         file-extension: yml
         refresh-enabled: true
-        shared-configs: spring-boot-http.yml,spring-boot-starter-druid.yml,spring-boot-starter-mybatis-plus.yml,spring-boot-starter-redis.yml
+        shared-configs: spring-boot-http.yml,spring-boot-starter-druid.yml,spring-boot-starter-mybatis-plus.yml,spring-boot-starter-redis.yml,spring-boot-starter-freemarker.yml
       discovery:
         server-addr: ${nacos.server.ip}:${nacos.server.port}
         namespace: ${nacos.server.namespace}

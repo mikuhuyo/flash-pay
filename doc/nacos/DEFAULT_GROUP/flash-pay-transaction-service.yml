@@ -15,4 +15,8 @@ spring:
         url: http://127.0.0.1:8849
 
 flash-pay:
-  pay-url: "http://127.0.0.1:56010/transaction/pay‐entry/"
+  # 此处应该修改为本地ipv4地址
+  pay-url: "http://127.0.0.1:56010/transaction/pay-entry/"
+
+swagger:
+  enable: true

@@ -1,0 +1,18 @@
+# freemarker基本配置
+spring:
+  freemarker:
+    charset: UTF-8
+    content-type: text/html
+    # 把Spring的RequestContext对象暴露为变量rc
+    request‐context‐attribute: rc
+    # expose‐request‐attributes: true
+    # expose‐session‐attributes: true
+    suffix: .html
+    enabled: true
+    template-loader-path: classpath:/templates/
+  resources:
+    # 关闭工程中默认的资源处理
+    add-mappings: false
+  mvc:
+    # 出现错误直接抛出异常
+    throw-exception-if-no-handler-found: true
