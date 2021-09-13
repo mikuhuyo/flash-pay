@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yuelimin
@@ -40,7 +40,7 @@ public class StaffDto implements Serializable {
     private Long storeId;
 
     @ApiModelProperty(value = "最后一次登录时间")
-    private LocalDateTime lastLoginTime;
+    private Date lastLoginTime;
 
     @ApiModelProperty(value = "0表示禁用, 1表示启用")
     private Boolean staffStatus;

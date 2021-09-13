@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yuelimin
@@ -96,16 +96,16 @@ public class RefundOrderDto implements Serializable {
     private String clientIp;
 
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     @ApiModelProperty(value = "订单过期时间")
-    private LocalDateTime expireTime;
+    private Date expireTime;
 
     @ApiModelProperty(value = "退款成功时间")
-    private LocalDateTime refundSuccessTime;
+    private Date refundSuccessTime;
 
 
 }

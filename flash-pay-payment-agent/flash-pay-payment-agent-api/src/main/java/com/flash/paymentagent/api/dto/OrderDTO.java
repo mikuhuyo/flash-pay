@@ -3,7 +3,7 @@ package com.flash.paymentagent.api.dto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yuelimin
@@ -35,10 +35,10 @@ public class OrderDTO implements Serializable {
     private String errorMsg;//渠道支付错误信息
     private String device;//设备
     private String clientIp;//客户端IP
-    private LocalDateTime createTime;//创建时间
-    private LocalDateTime updateTime;//更新时间
-    private LocalDateTime expireTime;//订单过期时间
-    private LocalDateTime paySuccessTime;//支付成功时间
+    private Date createTime;//创建时间
+    private Date updateTime;//更新时间
+    private Date expireTime;//订单过期时间
+    private Date paySuccessTime;//支付成功时间
     private String openId;
     /**
      * 原始商家的应用id

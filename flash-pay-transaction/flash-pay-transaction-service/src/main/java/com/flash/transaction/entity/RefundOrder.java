@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yuelimin
@@ -177,25 +177,25 @@ public class RefundOrder implements Serializable {
      * 创建时间
      */
     @TableField("CREATE_TIME")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
     @TableField("UPDATE_TIME")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     /**
      * 订单过期时间
      */
     @TableField("EXPIRE_TIME")
-    private LocalDateTime expireTime;
+    private Date expireTime;
 
     /**
      * 退款成功时间
      */
     @TableField("REFUND_SUCCESS_TIME")
-    private LocalDateTime refundSuccessTime;
+    private Date refundSuccessTime;
 
 
 }

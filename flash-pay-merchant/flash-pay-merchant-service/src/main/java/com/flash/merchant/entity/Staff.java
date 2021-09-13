@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author yuelimin
@@ -66,7 +66,7 @@ public class Staff implements Serializable {
      * 最后一次登录时间
      */
     @TableField("LAST_LOGIN_TIME")
-    private LocalDateTime lastLoginTime;
+    private Date lastLoginTime;
 
     /**
      * 0表示禁用, 1表示启用
