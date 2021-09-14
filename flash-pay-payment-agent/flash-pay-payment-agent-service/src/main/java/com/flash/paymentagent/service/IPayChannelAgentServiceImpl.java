@@ -23,11 +23,6 @@ import org.apache.dubbo.config.annotation.Service;
 public class IPayChannelAgentServiceImpl implements IPayChannelAgentService {
     @Override
     public PaymentResponseDTO<Object> createPayOrderByAliWap(AliConfigParam aliConfigParam, AlipayBean alipayBean) throws BusinessException {
-        System.out.println(aliConfigParam);
-        System.out.println(alipayBean);
-
-        System.out.println(aliConfigParam.rsaPrivateKey.length());
-
         log.info("支付宝配置参数: {}", aliConfigParam.toString());
         log.info("支付宝请求参数: {}", alipayBean.toString());
 
@@ -58,13 +53,6 @@ public class IPayChannelAgentServiceImpl implements IPayChannelAgentService {
         // 封装请求支付信息
         AlipayTradeWapPayRequest alipayRequest = new AlipayTradeWapPayRequest();
 
-        // JSONObject json = new JSONObject();
-        // json.put("out_trade_no", alipayBean.getOutTradeNo());
-        // json.put("subject", alipayBean.getSubject());
-        // json.put("total_amount", alipayBean.getTotalAmount());
-        // json.put("time_expire", alipayBean.getExpireTime());
-        // json.put("product_code", alipayBean.getProductCode());
-        // alipayRequest.setBizContent(json.toJSONString());
 
         AlipayTradeWapPayModel model = new AlipayTradeWapPayModel();
         // 闪聚平台订单
