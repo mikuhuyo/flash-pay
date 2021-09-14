@@ -101,6 +101,7 @@
         <rocketmq-starter.version>2.0.4</rocketmq-starter.version>
         <sharding-jdbc-starter.version>4.0.0-RC1</sharding-jdbc-starter.version>
         <spring.boot.admin.version>2.1.0</spring.boot.admin.version>
+        <alipay.version>4.16.44.ALL</alipay.version>
     </properties>
 
     <dependencyManagement>
@@ -196,7 +197,7 @@
             <dependency>
                 <groupId>com.alipay.sdk</groupId>
                 <artifactId>alipay-sdk-java</artifactId>
-                <version>3.7.73.ALL</version>
+                <version>${alipay.version}</version>
             </dependency>
             <!--微信支付-->
             <dependency>

@@ -14,6 +14,17 @@ import java.util.List;
  */
 public interface IPayChannelService {
     /**
+     * 根据支付渠道查询渠道参数
+     *
+     * @param appId           appId
+     * @param platformChannel 原始渠道
+     * @param payChannel      支付渠道
+     * @return PayChannelParamDto
+     * @throws BusinessException 自定义异常
+     */
+    PayChannelParamDto queryPayChannelParamByChannel(String appId, String platformChannel, String payChannel) throws BusinessException;
+
+    /**
      * 获取指定应用指定服务类型下所包含的原始支付渠道参数列表
      *
      * @param appId           应用ID

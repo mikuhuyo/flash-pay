@@ -15,6 +15,7 @@ import com.flash.transaction.api.dto.PlatformChannelDto;
 import com.flash.transaction.convert.PayChannelParamConvert;
 import com.flash.transaction.convert.PlatformChannelConvert;
 import com.flash.transaction.entity.AppPlatformChannel;
+import com.flash.transaction.entity.PayChannel;
 import com.flash.transaction.entity.PayChannelParam;
 import com.flash.transaction.mapper.AppPlatformChannelMapper;
 import com.flash.transaction.mapper.PayChannelParamMapper;
@@ -31,7 +32,7 @@ import java.util.List;
  * @since 11
  */
 @Service
-public class PayChannelServiceImpl implements IPayChannelService {
+public class IPayChannelServiceImpl implements IPayChannelService {
     @Autowired
     private PlatformChannelMapper platformChannelMapper;
     @Autowired
@@ -41,6 +42,17 @@ public class PayChannelServiceImpl implements IPayChannelService {
 
     @Resource
     private Cache cache;
+
+    @Override
+    public PayChannelParamDto queryPayChannelParamByChannel(String appId, String platformChannel, String payChannel) throws BusinessException {
+
+        AppPlatformChannel appPlatformChannel = appPlatformChannelMapper.selectOne(new LambdaQueryWrapper<AppPlatformChannel>().eq(AppPlatformChannel::getAppId, appId));
+
+        LambdaQueryWrapper<PayChannelParam> eq =
+                new LambdaQueryWrapper<PayChannelParam>().eq(PayChannelParam::getAppPlatformChannelId, appPlatformChannel.getId()).eq(PayChannelParam::getPayChannel, payChannel);
+
+        return PayChannelParamConvert.INSTANCE.entity2dto(payChannelParamMapper.selectOne(eq));
+    }
 
     @Override
     public PayChannelParamDto queryParamByApplicationPlatformAndPayChannel(String appId, String platformChannel, String payChannel) throws BusinessException {

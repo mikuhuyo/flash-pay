@@ -32,6 +32,7 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -113,6 +114,7 @@ public class MerchantServiceImpl implements IMerchantService {
         }
 
         Staff staff = StaffConvert.INSTANCE.dto2entity(staffDto);
+        staff.setLastLoginTime(new Date());
         staffMapper.insert(staff);
         return StaffConvert.INSTANCE.entity2dto(staff);
     }
