@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>flash-pay-transaction</artifactId>
-
+    <packaging>pom</packaging>
     <modules>
         <module>flash-pay-transaction-api</module>
         <module>flash-pay-transaction-service</module>
