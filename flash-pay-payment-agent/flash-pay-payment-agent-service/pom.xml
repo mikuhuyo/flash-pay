@@ -100,19 +100,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.tedzhdz</groupId>
-            <artifactId>wxpay-sdk</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-pay</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.tedzhdz</groupId>
-            <artifactId>wxpay-sdk</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
