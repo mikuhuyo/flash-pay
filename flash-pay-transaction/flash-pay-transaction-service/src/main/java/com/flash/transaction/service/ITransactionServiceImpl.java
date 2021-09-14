@@ -129,7 +129,7 @@ public class ITransactionServiceImpl implements ITransactionService {
         // 支付宝渠道参数
         AliConfigParam aliConfigParam = JSON.parseObject(payChannelParamDTO.getParam(), AliConfigParam.class);
         // 字符编码
-        aliConfigParam.setCharest("utf‐8");
+        aliConfigParam.setCharest("utf-8");
         PaymentResponseDTO<Object> payOrderResponse = iPayChannelAgentService.createPayOrderByAliWap(aliConfigParam, alipayBean);
 
         log.info("支付宝H5支付响应Content: {}", payOrderResponse.getContent());
