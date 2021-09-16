@@ -13,6 +13,15 @@ import com.flash.paymentagent.api.dto.PaymentResponseDTO;
  */
 public interface IPayChannelAgentService {
     /**
+     * 支付宝交易状态查询
+     *
+     * @param aliConfigParam 支付渠道参数
+     * @param outTradeNo     闪聚平台订单号
+     * @return PaymentResponseDTO<Object>
+     */
+    PaymentResponseDTO<Object> queryPayOrderByAli(AliConfigParam aliConfigParam, String outTradeNo);
+
+    /**
      * 调用手机支付宝wap支付接口
      *
      * @param aliConfigParam 支付渠道参数
