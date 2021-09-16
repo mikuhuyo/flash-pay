@@ -10,6 +10,14 @@ import com.flash.transaction.api.dto.QRCodeDto;
  * @since 11
  */
 public interface ITransactionService {
+    /**
+     * 更新订单支付状态
+     *
+     * @param tradeNo           闪聚平台订单号
+     * @param payChannelTradeNo 支付宝或微信的交易流水号
+     * @param state             订单状态 交易状态支付状态,0‐订单生成,1‐支付中(目前未使用),2‐支付成功,4‐关闭,5‐失败
+     */
+    void updateOrderTradeNoAndTradeState(String tradeNo, String payChannelTradeNo, String state);
 
     /**
      * 提交订单

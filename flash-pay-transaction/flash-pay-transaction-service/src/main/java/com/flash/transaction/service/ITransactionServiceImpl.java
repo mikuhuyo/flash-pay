@@ -3,6 +3,8 @@ package com.flash.transaction.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.flash.common.domain.BusinessException;
 import com.flash.common.domain.CommonErrorCode;
 import com.flash.common.util.AmountUtil;
@@ -152,6 +154,16 @@ public class ITransactionServiceImpl implements ITransactionService {
         if (!iAppService.queryAppInMerchant(appId, merchantId)) {
             throw new BusinessException(CommonErrorCode.E_200005);
         }
+    }
+
+    @Override
+    public void updateOrderTradeNoAndTradeState(String tradeNo, String payChannelTradeNo, String state) {
+        final LambdaUpdateWrapper<PayOrder> lambda = new LambdaUpdateWrapper<PayOrder>();
+        lambda.eq(PayOrder::getTradeNo, tradeNo).set(PayOrder::getPayChannelTradeNo, payChannelTradeNo).set(PayOrder::getTradeState, state);
+        if (state != null && "2".equals(state)) {
+            lambda.set(PayOrder::getPaySuccessTime, new Date());
+        }
+        payOrderMapper.update(null, lambda);
     }
 
     @Override
