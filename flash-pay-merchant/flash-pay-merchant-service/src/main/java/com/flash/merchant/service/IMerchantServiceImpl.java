@@ -10,6 +10,7 @@ import com.flash.common.util.PhoneUtil;
 import com.flash.common.util.StringUtil;
 import com.flash.merchant.api.IMerchantService;
 import com.flash.merchant.api.dto.MerchantDto;
+import com.flash.merchant.api.dto.MerchantQueryDto;
 import com.flash.merchant.api.dto.StaffDto;
 import com.flash.merchant.api.dto.StoreDto;
 import com.flash.merchant.api.vo.MerchantDetailVo;
@@ -27,11 +28,13 @@ import com.flash.merchant.mapper.StoreStaffMapper;
 import com.flash.user.api.TenantService;
 import com.flash.user.api.dto.tenant.CreateTenantRequestDTO;
 import com.flash.user.api.dto.tenant.TenantDTO;
+import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +56,28 @@ public class IMerchantServiceImpl implements IMerchantService {
 
     @Reference
     private TenantService tenantService;
+
+    @Override
+    public PageVO<MerchantDto> queryMerchantPage(MerchantQueryDto merchantQueryDto, Integer pageNo, Integer pageSize) throws BusinessException {
+        IPage<Merchant> page = new Page<>(pageNo == null ? 1 : pageNo, pageSize == null ? 10 : pageSize);
+        LambdaQueryWrapper<Merchant> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        if (merchantQueryDto != null) {
+            lambdaQueryWrapper
+                    .like(StringUtils.isNotBlank(merchantQueryDto.getMerchantName()), Merchant::getMerchantName, merchantQueryDto.getMerchantName())
+                    .eq(StringUtils.isNotBlank(merchantQueryDto.getMobile()), Merchant::getMobile, merchantQueryDto.getMobile())
+                    .eq(StringUtils.isNotBlank(merchantQueryDto.getMerchantType()), Merchant::getMerchantType, merchantQueryDto.getMerchantType())
+                    .eq(merchantQueryDto.getAuditStatus() != null, Merchant::getAuditStatus, merchantQueryDto.getAuditStatus());
+        }
+
+        IPage<Merchant> result = merchantMapper.selectPage(page, lambdaQueryWrapper);
+        if (result.getTotal() > 0) {
+            List<MerchantDto> merList = MerchantConvert.INSTANCE.entityList2dtoList(result.getRecords());
+            return new PageVO<MerchantDto>(merList, result.getTotal(), Long.valueOf(result.getCurrent()).intValue(), Long.valueOf(result.getSize()).intValue());
+        }
+
+        return new PageVO<MerchantDto>(new ArrayList<MerchantDto>(), 0, Long.valueOf(result.getCurrent()).intValue(), Long.valueOf(result.getSize()).intValue());
+    }
 
     @Override
     public Boolean queryStoreInMerchantId(Long storeId, Long merchantId) throws BusinessException {

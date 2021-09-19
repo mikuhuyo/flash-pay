@@ -3,6 +3,7 @@ package com.flash.merchant.api;
 import com.flash.common.domain.BusinessException;
 import com.flash.common.domain.PageVO;
 import com.flash.merchant.api.dto.MerchantDto;
+import com.flash.merchant.api.dto.MerchantQueryDto;
 import com.flash.merchant.api.dto.StaffDto;
 import com.flash.merchant.api.dto.StoreDto;
 import com.flash.merchant.api.vo.MerchantDetailVo;
@@ -13,6 +14,17 @@ import com.flash.merchant.api.vo.MerchantDetailVo;
  * @since 11
  */
 public interface IMerchantService {
+    /**
+     * 商户分页条件查询
+     *
+     * @param merchantQueryDto 查询条件
+     * @param pageNo           页码
+     * @param pageSize         数据条数
+     * @return PageVO<MerchantDto>
+     * @throws BusinessException 自定义异常
+     */
+    PageVO<MerchantDto> queryMerchantPage(MerchantQueryDto merchantQueryDto, Integer pageNo, Integer pageSize) throws BusinessException;
+
     /**
      * 查询门店是否在指定商户下
      *
