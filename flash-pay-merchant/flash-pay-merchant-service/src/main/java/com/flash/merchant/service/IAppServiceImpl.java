@@ -22,7 +22,7 @@ import java.util.List;
  * @since 11
  */
 @Service
-public class AppServiceImpl implements IAppService {
+public class IAppServiceImpl implements IAppService {
     @Autowired
     private AppMapper appMapper;
     @Autowired

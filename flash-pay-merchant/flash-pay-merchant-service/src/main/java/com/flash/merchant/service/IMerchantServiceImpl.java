@@ -41,7 +41,7 @@ import java.util.List;
  * @since 11
  */
 @Service
-public class MerchantServiceImpl implements IMerchantService {
+public class IMerchantServiceImpl implements IMerchantService {
     @Autowired
     private MerchantMapper merchantMapper;
     @Autowired
