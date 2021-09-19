@@ -36,20 +36,6 @@ public class MerchantController {
     @Autowired
     private IUploadService iUploadService;
 
-    @PostMapping("/my/stores/merchants/page")
-    @ApiOperation("分页查询商户下的门店")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageNo", value = "页码", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "pageSie", value = "每页记录数", required = true, dataType = "int", paramType = "query")
-    })
-    public PageVO<StoreDto> queryStoreByPage(@RequestParam Integer pageNo, @RequestParam Integer pageSize) {
-        Long merchantId = SecurityUtil.getMerchantId();
-        StoreDto storeDto = new StoreDto();
-        storeDto.setMerchantId(merchantId);
-
-        return iMerchantService.queryStoreByPage(storeDto, pageNo, pageSize);
-    }
-
     @ApiOperation(value = "资质申请")
     @PostMapping("/my/merchants/save")
     @ApiImplicitParam(value = "资质申请信息", name = "merchantDetailVO", required = true, dataType = "MerchantDetailVO", paramType = "body")
