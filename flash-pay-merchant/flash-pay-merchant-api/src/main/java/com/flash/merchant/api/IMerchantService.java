@@ -15,6 +15,15 @@ import com.flash.merchant.api.vo.MerchantDetailVo;
  */
 public interface IMerchantService {
     /**
+     * 商户资质审核
+     *
+     * @param merchantId  商户id
+     * @param auditStatus 状态
+     * @throws BusinessException 自定义异常
+     */
+    void verifyMerchant(Long merchantId, String auditStatus) throws BusinessException;
+
+    /**
      * 商户分页条件查询
      *
      * @param merchantQueryDto 查询条件

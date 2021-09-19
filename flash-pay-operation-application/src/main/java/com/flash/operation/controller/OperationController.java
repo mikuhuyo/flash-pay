@@ -22,6 +22,17 @@ public class OperationController {
     @Reference
     private IMerchantService merchantService;
 
+    @PostMapping("/m/merchants/audit/{auditStatus}")
+    @ApiOperation("商户资质申请审核")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "merchantId", value = "某个商户id", required = true, dataType = "Long", paramType = "query"),
+            @ApiImplicitParam(name = "auditStatus", value = "审核状态 2-审核通过,3-审核拒绝", required = true, dataType = "int", paramType = "path")
+    })
+    public void auditMerchant(@RequestParam Long merchantId, @PathVariable String auditStatus) {
+        // 根据传入的商户标识, 进行审核
+        merchantService.verifyMerchant(merchantId, auditStatus);
+    }
+
     @GetMapping("/m/merchants")
     @ApiOperation("根据id商户获取商户信息")
     @ApiImplicitParam(name = "id", value = "商户id", required = true, dataType = "Long", paramType = "query")

@@ -58,6 +58,16 @@ public class IMerchantServiceImpl implements IMerchantService {
     private TenantService tenantService;
 
     @Override
+    public void verifyMerchant(Long merchantId, String auditStatus) {
+        Merchant merchant = merchantMapper.selectById(merchantId);
+        if (merchant == null) {
+            throw new BusinessException(CommonErrorCode.E_100108);
+        }
+        merchant.setAuditStatus(auditStatus);
+        merchantMapper.updateById(merchant);
+    }
+
+    @Override
     public PageVO<MerchantDto> queryMerchantPage(MerchantQueryDto merchantQueryDto, Integer pageNo, Integer pageSize) throws BusinessException {
         IPage<Merchant> page = new Page<>(pageNo == null ? 1 : pageNo, pageSize == null ? 10 : pageSize);
         LambdaQueryWrapper<Merchant> lambdaQueryWrapper = new LambdaQueryWrapper<>();
