@@ -17,6 +17,52 @@ import java.util.List;
  */
 public interface IMerchantService {
     /**
+     * 删除员工
+     *
+     * @param id 员工id
+     * @throws BusinessException 自定义异常
+     */
+    void removeStaff(Long id) throws BusinessException;
+
+    /**
+     * 修改员工信息
+     *
+     * @param staff     员工信息
+     * @param roleCodes 角色代码
+     * @throws BusinessException 自定义异常
+     */
+    void modifyStaff(StaffDto staff, String[] roleCodes) throws BusinessException;
+
+    /**
+     * 查询员工详情
+     *
+     * @param id       员工id
+     * @param tenantId 租户id
+     * @return StaffDto
+     */
+    StaffDto queryStaffDetail(Long id, Long tenantId);
+
+    /**
+     * 商户新增员工和账号
+     *
+     * @param staffDto  员工信息
+     * @param roleCodes 角色代码
+     * @throws BusinessException
+     */
+    void createStaffAndAccount(StaffDto staffDto, String[] roleCodes) throws BusinessException;
+
+    /**
+     * 分页查询商户下的员工
+     *
+     * @param staffDto 员工信息
+     * @param pageNo   页码
+     * @param pageSize 数据条数
+     * @return PageVO<StaffDto>
+     * @throws BusinessException 自定义异常
+     */
+    PageVO<StaffDto> queryStaffByPage(StaffDto staffDto, Integer pageNo, Integer pageSize) throws BusinessException;
+
+    /**
      * 删除某门店
      *
      * @param id 门店id

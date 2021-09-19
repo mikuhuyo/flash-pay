@@ -11,10 +11,7 @@ import com.flash.common.domain.PageVO;
 import com.flash.common.util.PhoneUtil;
 import com.flash.common.util.StringUtil;
 import com.flash.merchant.api.IMerchantService;
-import com.flash.merchant.api.dto.MerchantDto;
-import com.flash.merchant.api.dto.MerchantQueryDto;
-import com.flash.merchant.api.dto.StaffDto;
-import com.flash.merchant.api.dto.StoreDto;
+import com.flash.merchant.api.dto.*;
 import com.flash.merchant.api.vo.MerchantDetailVo;
 import com.flash.merchant.convert.MerchantConvert;
 import com.flash.merchant.convert.StaffConvert;
@@ -27,12 +24,16 @@ import com.flash.merchant.mapper.MerchantMapper;
 import com.flash.merchant.mapper.StaffMapper;
 import com.flash.merchant.mapper.StoreMapper;
 import com.flash.merchant.mapper.StoreStaffMapper;
+import com.flash.user.api.AuthorizationService;
 import com.flash.user.api.TenantService;
+import com.flash.user.api.dto.authorization.RoleDTO;
+import com.flash.user.api.dto.tenant.CreateAccountRequestDTO;
 import com.flash.user.api.dto.tenant.CreateTenantRequestDTO;
 import com.flash.user.api.dto.tenant.TenantDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +59,137 @@ public class IMerchantServiceImpl implements IMerchantService {
 
     @Reference
     private TenantService tenantService;
+
+    @Reference
+    private AuthorizationService authService;
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void removeStaff(Long id) {
+        Staff staff = staffMapper.selectById(id);
+        // 清除员工和门店的关系
+        storeStaffMapper.delete(new QueryWrapper<StoreStaff>().lambda().eq(StoreStaff::getStaffId, staff.getId()));
+
+        // 删除员工对应的账号, 账号-角色之间的关系
+        // 获取商户的租户ID
+        Long tenantId = queryMerchantById(staff.getMerchantId()).getTenantId();
+        // 将某账号从租户内移除, 租户管理员不可移除
+        tenantService.unbindTenant(tenantId, staff.getUsername());
+
+        // 删除员工
+        staffMapper.deleteById(staff);
+    }
+
+    @Override
+    public void modifyStaff(StaffDto staffDto, String[] roleCodes) {
+        Staff staff = staffMapper.selectById(staffDto.getId());
+        if (staff == null) {
+            throw new BusinessException(CommonErrorCode.E_200013);
+        }
+        // 更新员工的信息
+        staff.setFullName(staffDto.getFullName());
+        staff.setPosition(staffDto.getPosition());
+        staff.setStoreId(staffDto.getStoreId());
+        staffMapper.updateById(staff);
+
+        // 处理员工的角色是否有修改
+        Long tenantId = queryMerchantById(staff.getMerchantId()).getTenantId();
+        tenantService.getAccountRoleBind(staff.getUsername(), tenantId, roleCodes);
+    }
+
+    @Override
+    public StaffDto queryStaffDetail(Long id, Long tenantId) {
+        StaffDto staff = queryStaffById(id);
+
+        // 根据用户名和租户ID查询角色信息
+        List<RoleDTO> roles = authService.queryRolesByUsername(staff.getUsername(), tenantId);
+        List<StaffRoleDto> staffRoles = new ArrayList<>();
+        if (!roles.isEmpty()) {
+            roles.forEach(roleDTO -> {
+                StaffRoleDto staffRoleDto = new StaffRoleDto();
+                BeanUtils.copyProperties(roleDTO, staffRoleDto);
+                staffRoles.add(staffRoleDto);
+            });
+        }
+        staff.setRoles(staffRoles);
+        return staff;
+    }
+
+    /**
+     * 获取员工详情
+     *
+     * @param id 员工id
+     * @return StaffDto
+     */
+    public StaffDto queryStaffById(Long id) {
+        Staff staff = staffMapper.selectById(id);
+        if (staff == null) {
+            throw new BusinessException(CommonErrorCode.E_200013);
+        }
+        StaffDto dto = StaffConvert.INSTANCE.entity2dto(staff);
+        // 根据员工归属门店id, 获取门店信息
+        StoreDto store = queryStoreById(staff.getStoreId());
+        dto.setStoreName(store.getStoreName());
+        return dto;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void createStaffAndAccount(StaffDto staff, String[] roleCodes) {
+        // 新增员工
+        createStaff(staff);
+
+        // 获取商户的租户ID
+        Long tenantId = queryMerchantById(staff.getMerchantId()).getTenantId();
+        CreateAccountRequestDTO accountRequest = new CreateAccountRequestDTO();
+        accountRequest.setMobile(staff.getMobile());
+        accountRequest.setUsername(staff.getUsername());
+        accountRequest.setPassword(staff.getPassword());
+
+        // 在租户内创建账号并绑定角色, 包含校验账号是否存在及角色是否绑定
+        tenantService.checkCreateStaffAccountRole(tenantId, accountRequest, roleCodes);
+    }
+
+    @Override
+    public PageVO<StaffDto> queryStaffByPage(StaffDto StaffDto, Integer pageNo, Integer pageSize) {
+        // 创建分页
+        Page<Staff> page = new Page<>(pageNo, pageSize);
+        // 构造查询条件
+        QueryWrapper<Staff> qw = new QueryWrapper();
+        if (StaffDto != null) {
+            if (StaffDto.getMerchantId() != null) {
+                qw.lambda().eq(Staff::getMerchantId, StaffDto.getMerchantId());
+            }
+            if (StringUtils.isNotBlank(StaffDto.getUsername())) {
+                qw.lambda().like(Staff::getUsername, StaffDto.getUsername());
+            }
+            if (StringUtils.isNotBlank(StaffDto.getFullName())) {
+                qw.lambda().like(Staff::getFullName, StaffDto.getFullName());
+            }
+            if (StaffDto.getStaffStatus() != null) {
+                qw.lambda().eq(Staff::getStaffStatus, StaffDto.getStaffStatus());
+            }
+        }
+        // 执行查询
+        IPage<Staff> staffIPage = staffMapper.selectPage(page, qw);
+        // entity List转DTO List
+        List<StaffDto> staffList = StaffConvert.INSTANCE.entityList2dtoList(staffIPage.getRecords());
+        // 封装结果集
+        PageVO<StaffDto> StaffDtoS = new PageVO<>(staffList, staffIPage.getTotal(), pageNo, pageSize);
+
+        if (StaffDtoS.getCounts() == 0) {
+            return StaffDtoS;
+        }
+
+        //添加员工所属门店信息
+        for (StaffDto staffs : StaffDtoS) {
+            StoreDto StoreDto = queryStoreById(staffs.getStoreId());
+            if (StoreDto != null) {
+                staffs.setStoreName(StoreDto.getStoreName());
+            }
+        }
+        return StaffDtoS;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

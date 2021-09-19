@@ -15,6 +15,24 @@ import java.util.List;
 public interface TenantService {
 
     /**
+     * 在租户内创建账号并绑定角色, 包含校验账号是否存在及角色是否绑定
+     *
+     * @param tenantId
+     * @param accountRequest
+     * @param roleCodes
+     */
+    void checkCreateStaffAccountRole(Long tenantId, CreateAccountRequestDTO accountRequest, String[] roleCodes);
+
+    /**
+     * 更新账号的角色信息
+     *
+     * @param username
+     * @param tenantId
+     * @param roleCodes
+     */
+    void getAccountRoleBind(String username, Long tenantId, String[] roleCodes);
+
+    /**
      * 创建租户
      * 新增租户, 新增租户管理员, 同时初始化套餐
      * 1.若管理员用户名已存在(目前不会出现, 用户名内部随机生成)

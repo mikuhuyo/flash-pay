@@ -6,6 +6,7 @@ import com.flash.user.api.dto.authorization.AuthorizationInfoDTO;
 import com.flash.user.api.dto.authorization.PrivilegeDTO;
 import com.flash.user.api.dto.authorization.PrivilegeTreeDTO;
 import com.flash.user.api.dto.authorization.RoleDTO;
+import com.flash.user.api.dto.tenant.AccountRoleDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,35 @@ import java.util.Map;
  * 租户内角色数量, 租户内账号数量, 应用数量可用套餐限制
  */
 public interface AuthorizationService {
+
+    /**
+     * 判断账号是否绑定了某些角色
+     *
+     * @param username
+     * @param tenantId
+     * @param roleCodes
+     * @return
+     * @throws BusinessException
+     */
+    List<AccountRoleDTO> queryAccountBindRole(String username, Long tenantId, String[] roleCodes) throws BusinessException;
+
+    /**
+     * 根据租户内的账号查询绑定的角色
+     *
+     * @param username
+     * @param tenantId
+     * @return
+     */
+    List<AccountRoleDTO> queryAccountRole(String username, Long tenantId);
+
+    /**
+     * 根据租户内的账号查询绑定的角色列表
+     *
+     * @param username
+     * @param tenantId
+     * @return
+     */
+    List<RoleDTO> queryRolesByUsername(String username, Long tenantId);
 
     /**
      * 授权, 获取某用户在多个租户下的权限信息

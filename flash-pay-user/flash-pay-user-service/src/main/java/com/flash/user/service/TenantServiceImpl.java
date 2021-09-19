@@ -36,10 +36,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -74,6 +73,41 @@ public class TenantServiceImpl implements TenantService {
     private String smsUrl;
     @Value("${sms.effectiveTime}")
     private String effectiveTime;
+
+    @Override
+    public void checkCreateStaffAccountRole(Long tenantId, CreateAccountRequestDTO accountRequest, String[] roleCodes) {
+        // 判断账号是否存在
+        // 根据手机号判断
+        boolean byMobile = isExistAccountByMobile(accountRequest.getMobile());
+        if (!byMobile) {
+            // 如果账号不存在, 为员工创建账号并绑定角色
+            AccountDTO account = createAccount(accountRequest);
+            // 绑定角色
+            authorizationService.bindAccountRole(accountRequest.getUsername(), tenantId, roleCodes);
+        } else {
+            // 如果已存在账号, 判断是否绑定了角色(角色可能是多个), 如果没绑定角色, 则绑定
+            getAccountRoleBind(accountRequest.getUsername(), tenantId, roleCodes);
+        }
+        // 绑定租户和账号的关系
+        bindTenant(tenantId, accountRequest.getUsername());
+    }
+
+    @Override
+    public void getAccountRoleBind(String username, Long tenantId, String[] roleCodes) {
+        // 如果已存在账号, 判断是否绑定了角色(角色可能是多个), 如果没绑定角色, 则绑定
+        List<AccountRoleDTO> accountRoleDTOS = authorizationService.queryAccountBindRole(username, tenantId, roleCodes);
+        if (accountRoleDTOS.isEmpty()) {
+            // 为空, 则全部绑定
+            authorizationService.bindAccountRole(username, tenantId, roleCodes);
+        } else {
+            // 不为空, 求差集, 将未绑定的角色绑定到账号
+            ArrayList<String> listRoleCodes = new ArrayList<>(Arrays.asList(roleCodes));
+            List<String> collect = listRoleCodes.stream().filter(item -> !accountRoleDTOS.contains(item)).collect(toList());
+            if (collect != null) {
+                authorizationService.bindAccountRole(username, tenantId, collect.toArray(new String[collect.size()]));
+            }
+        }
+    }
 
     /**
      * 创建租户

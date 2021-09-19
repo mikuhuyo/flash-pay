@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author yuelimin
@@ -45,5 +46,13 @@ public class StaffDto implements Serializable {
     @ApiModelProperty(value = "0表示禁用, 1表示启用")
     private Boolean staffStatus;
 
+    @ApiModelProperty("密码")
+    private String password;
+
+    @ApiModelProperty("员工所属门店名称")
+    private String storeName;
+
+    @ApiModelProperty("员工的角色")
+    private List<StaffRoleDto> roles;
 
 }

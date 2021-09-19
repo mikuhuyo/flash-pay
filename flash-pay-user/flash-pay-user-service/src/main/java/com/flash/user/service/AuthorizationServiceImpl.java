@@ -12,7 +12,9 @@ import com.flash.user.api.dto.authorization.AuthorizationInfoDTO;
 import com.flash.user.api.dto.authorization.PrivilegeDTO;
 import com.flash.user.api.dto.authorization.PrivilegeTreeDTO;
 import com.flash.user.api.dto.authorization.RoleDTO;
+import com.flash.user.api.dto.tenant.AccountRoleDTO;
 import com.flash.user.api.dto.tenant.TenRolePrivilegeDTO;
+import com.flash.user.convert.AccountRoleConvert;
 import com.flash.user.convert.AuthorizationPrivilegeConvert;
 import com.flash.user.convert.AuthorizationRoleConvert;
 import com.flash.user.entity.*;
@@ -41,6 +43,40 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private AuthorizationRolePrivilegeMapper rolePrivilegeMapper;
     @Autowired
     private AuthorizationPrivilegeGroupMapper groupMapper;
+
+    @Override
+    public List<AccountRoleDTO> queryAccountBindRole(String username, Long tenantId, String[] roleCodes) {
+        List<String> roleList = new ArrayList<>(Arrays.asList(roleCodes));
+        List<AccountRole> accountRoles = accountRoleMapper.selectList(new QueryWrapper<AccountRole>().lambda()
+                .eq(AccountRole::getUsername, username).eq(AccountRole::getTenantId, tenantId)
+                .in(AccountRole::getRoleCode, roleList));
+        return AccountRoleConvert.INSTANCE.listentity2dto(accountRoles);
+    }
+
+    @Override
+    public List<AccountRoleDTO> queryAccountRole(String username, Long tenantId) {
+        List<AccountRole> accountRoles = accountRoleMapper.selectList(new QueryWrapper<AccountRole>().lambda()
+                .eq(AccountRole::getUsername, username)
+                .eq(AccountRole::getTenantId, tenantId));
+        return AccountRoleConvert.INSTANCE.listentity2dto(accountRoles);
+    }
+
+    @Override
+    public List<RoleDTO> queryRolesByUsername(String username, Long tenantId) {
+        // 获取员工用户名, 即账号的用户名
+        List<AccountRoleDTO> list = queryAccountRole(username, tenantId);
+        List<RoleDTO> roleDTOS = null;
+        if (!list.isEmpty()) {
+            List<String> codes = new ArrayList<>();
+            list.forEach(ar -> {
+                String roleCode = ar.getRoleCode();
+                codes.add(roleCode);
+            });
+            String[] c = codes.toArray(new String[codes.size()]);
+            roleDTOS = queryRole(tenantId, c);
+        }
+        return roleDTOS;
+    }
 
     /**
      * 授权, 获取某用户在多个租户下的权限信息
