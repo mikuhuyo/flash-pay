@@ -3,7 +3,6 @@ package com.flash.merchant.controller;
 import com.flash.common.domain.BusinessException;
 import com.flash.common.domain.CommonErrorCode;
 import com.flash.common.domain.PageVO;
-import com.flash.common.util.QRCodeUtil;
 import com.flash.common.util.StringUtil;
 import com.flash.merchant.api.IMerchantService;
 import com.flash.merchant.api.dto.MerchantDto;
@@ -13,12 +12,9 @@ import com.flash.merchant.api.vo.MerchantRegistryVo;
 import com.flash.merchant.service.ISmsService;
 import com.flash.merchant.service.IUploadService;
 import com.flash.merchant.utils.SecurityUtil;
-import com.flash.transaction.api.ITransactionService;
-import com.flash.transaction.api.dto.QRCodeDto;
 import io.swagger.annotations.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,41 +35,6 @@ public class MerchantController {
     private ISmsService iSmsService;
     @Autowired
     private IUploadService iUploadService;
-
-    @Value("${flash-pay.c2b.subject}")
-    private String subject;
-    @Value("${flash-pay.c2b.body}")
-    private String body;
-
-    @Reference
-    private ITransactionService iTransactionService;
-
-    @GetMapping(value = "/my/apps/{appId}/stores/{storeId}/app-store-qrcode")
-    @ApiOperation("生成商户应用门店二维码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "appId", value = "商户应用id", required = true, dataType = "String", paramType = "path"),
-            @ApiImplicitParam(name = "storeId", value = "商户门店id", required = true, dataType = "String", paramType = "path"),
-    })
-    public String createCScanBStoreQRCode(@PathVariable("appId") String appId, @PathVariable("storeId") Long storeId) {
-        Long merchantId = SecurityUtil.getMerchantId();
-        QRCodeDto qrCodeDto = new QRCodeDto();
-        qrCodeDto.setMerchantId(merchantId);
-        qrCodeDto.setAppId(appId);
-        qrCodeDto.setStoreId(storeId);
-
-        MerchantDto merchantDto = iMerchantService.queryMerchantById(merchantId);
-
-        qrCodeDto.setSubject(String.format(subject, merchantDto.getMerchantName()));
-        qrCodeDto.setBody(String.format(body, merchantDto.getMerchantName()));
-
-        String code = iTransactionService.createStoreQRCode(qrCodeDto);
-
-        try {
-            return QRCodeUtil.createQRCode(code, 200, 200);
-        } catch (Exception e) {
-            throw new BusinessException(CommonErrorCode.E_200007);
-        }
-    }
 
     @PostMapping("/my/stores/merchants/page")
     @ApiOperation("分页查询商户下的门店")
