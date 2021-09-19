@@ -13,6 +13,8 @@
 
 这个闪聚支付还是我的一个学习项目, 不得不说抄代码能学会很多东西 :)
 
+项目中并没有使用分库分表插件, 个人的学习项目我感觉不需要太多的技术点.
+
 Ps: 万万没想到写文档和注释是这么痛苦.
 
 所需技术点:
@@ -152,14 +154,17 @@ Ps: 万万没想到写文档和注释是这么痛苦.
 
 ### 启动类
 
-| 启动顺序 | 启动类                      | 说明         |
-| -------- | --------------------------- | ------------ |
-| `1`      | `MonitorServiceApplication` | 监控服务     |
-| `2`      | `GatewayBootstrap`          | 网关服务     |
-| `3`      | `UaaBootstrap`              | 认证服务     |
-| `4`      | `UserBootstrap`             | 统一用户服务 |
-| `5`      | `MerchantBootstrap`         | 商户服务     |
-| `6`      | `TransactionBootstrap`      | 交易服务     |
+| 启动顺序 | 启动类                          | 说明         |
+| -------- | ------------------------------- | ------------ |
+| `1`      | `MonitorServiceApplication`     | 监控服务     |
+| `2`      | `GatewayBootstrap`              | 网关服务     |
+| `3`      | `UaaBootstrap`                  | 认证服务     |
+| `4`      | `UserBootstrap`                 | 统一用户服务 |
+| `5`      | `MerchantBootstrap`             | 商户服务     |
+| `6`      | `TransactionBootstrap`          | 交易服务     |
+| `7`      | `PaymentAgentBootstrap`         | 支付代理服务 |
+| `8`      | `OperationApplicationBootstrap` | 运营应用     |
+| `9`      | `MerchantApplicationBootstrap`  | 商户应用     |
 
 最后启动前端工程.
 
