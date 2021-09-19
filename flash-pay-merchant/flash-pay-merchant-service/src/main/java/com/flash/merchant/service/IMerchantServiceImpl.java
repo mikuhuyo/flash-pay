@@ -1,6 +1,8 @@
 package com.flash.merchant.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.flash.common.domain.BusinessException;
@@ -56,6 +58,100 @@ public class IMerchantServiceImpl implements IMerchantService {
 
     @Reference
     private TenantService tenantService;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeStore(Long id) {
+        Store store = storeMapper.selectById(id);
+        // 根门店不可删除
+        if (store.getParentId() == null) {
+            throw new BusinessException(CommonErrorCode.E_200018);
+        }
+        // 清除门店和员工关系
+        storeStaffMapper.delete(new QueryWrapper<StoreStaff>().lambda().eq(StoreStaff::getStoreId, id));
+        // 清除员工所属的门店
+        staffMapper.update(null, new LambdaUpdateWrapper<Staff>().eq(Staff::getStoreId, id).set(Staff::getStoreId, null));
+        // 删除门店
+        storeMapper.deleteById(id);
+    }
+
+    @Override
+    public void modifyStore(StoreDto dto, List<Long> staffIds) {
+        // 更新门店的信息
+        Store store = StoreConvert.INSTANCE.dto2entity(dto);
+        storeMapper.updateById(store);
+
+        if (staffIds != null) {
+            // 清除门店绑定的管理员
+            storeStaffMapper.delete(new QueryWrapper<StoreStaff>().lambda().eq(StoreStaff::getStoreId, dto.getId()));
+            // 重新绑定关系, 设置管理员
+            staffIds.forEach(id -> {
+                bindStaffToStore(store.getId(), id);
+            });
+        }
+    }
+
+    @Override
+    public StoreDto queryStoreById(Long id) {
+        Store store = storeMapper.selectById(id);
+        StoreDto storeDTO = StoreConvert.INSTANCE.entity2dto(store);
+        if (storeDTO != null) {
+            List<StaffDto> staffs = queryStoreAdmin(id);
+            storeDTO.setStaffs(staffs);
+        }
+        return storeDTO;
+    }
+
+    private List<StaffDto> queryStoreAdmin(Long storeId) {
+        // 根据门店获取管理员的id
+        List<StoreStaff> storeStaffs = storeStaffMapper.selectList(new LambdaQueryWrapper<StoreStaff>().eq(StoreStaff::getStoreId, storeId));
+        List<Staff> staff = null;
+        if (!storeStaffs.isEmpty()) {
+            List<Long> staffIds = new ArrayList<>();
+            // 查询结果不为空, 则遍历获取管理员id. 可能有多个
+            storeStaffs.forEach(ss -> {
+                Long staffId = ss.getStaffId();
+                staffIds.add(staffId);
+            });
+            // 根据id获取管理员信息
+            staff = staffMapper.selectBatchIds(staffIds);
+        }
+        return StaffConvert.INSTANCE.entityList2dtoList(staff);
+    }
+
+    @Override
+    public StoreDto createStore(StoreDto storeDto, List<Long> staffIds) {
+        // 设置根门店
+        Long rootStoreId = getRootStore(storeDto.getMerchantId());
+        storeDto.setParentId(rootStoreId);
+
+        // 新增门店
+        Store store = StoreConvert.INSTANCE.dto2entity(storeDto);
+        storeMapper.insert(store);
+
+        if (staffIds != null) {
+            // 设置管理员
+            staffIds.forEach(id -> {
+                bindStaffToStore(store.getId(), id);
+            });
+        }
+        return StoreConvert.INSTANCE.entity2dto(store);
+    }
+
+    /**
+     * 查询根门店
+     *
+     * @param merchantId 商户id
+     * @return Long
+     */
+    private Long getRootStore(Long merchantId) {
+        Store store = storeMapper.selectOne(new LambdaQueryWrapper<Store>().eq(Store::getMerchantId, merchantId).isNull(Store::getParentId));
+        if (store == null) {
+            throw new BusinessException(CommonErrorCode.E_200014);
+        }
+        return store.getId();
+    }
+
 
     @Override
     public void verifyMerchant(Long merchantId, String auditStatus) {

@@ -5,6 +5,8 @@ import com.flash.merchant.entity.Staff;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author yuelimin
  * @version 1.0.0
@@ -17,5 +19,7 @@ public interface StaffConvert {
     Staff dto2entity(StaffDto staffDto);
 
     StaffDto entity2dto(Staff staff);
+
+    List<StaffDto> entityList2dtoList(List<Staff> staffs);
 }
 

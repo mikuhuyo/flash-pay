@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author yuelimin
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * @since 1.8
  */
 @Data
-@ApiModel(value = "StoreDto", description = "")
+@ApiModel(value = "StoreDto", description = "门店信息")
 public class StoreDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,5 +38,7 @@ public class StoreDto implements Serializable {
     @ApiModelProperty(value = "门店地址")
     private String storeAddress;
 
+    @ApiModelProperty("门店管理员")
+    private List<StaffDto> staffs;
 
 }

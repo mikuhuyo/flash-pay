@@ -8,12 +8,47 @@ import com.flash.merchant.api.dto.StaffDto;
 import com.flash.merchant.api.dto.StoreDto;
 import com.flash.merchant.api.vo.MerchantDetailVo;
 
+import java.util.List;
+
 /**
  * @author yuelimin
  * @version 1.0.0
  * @since 11
  */
 public interface IMerchantService {
+    /**
+     * 删除某门店
+     *
+     * @param id 门店id
+     * @throws BusinessException 自定义异常
+     */
+    void removeStore(Long id) throws BusinessException;
+
+    /**
+     * 修改门店
+     *
+     * @param store 门店信息
+     * @throws BusinessException 自定义异常
+     */
+    void modifyStore(StoreDto store, List<Long> staffIds) throws BusinessException;
+
+    /**
+     * 查询某个门店
+     *
+     * @param id 门店id
+     * @return StoreDto
+     * @throws BusinessException 自定义异常
+     */
+    StoreDto queryStoreById(Long id) throws BusinessException;
+
+    /**
+     * 商户下新增门店, 并设置管理员
+     *
+     * @param storeDTO 门店信息
+     * @throws BusinessException 自定义异常
+     */
+    StoreDto createStore(StoreDto storeDTO, List<Long> staffIds) throws BusinessException;
+
     /**
      * 商户资质审核
      *
