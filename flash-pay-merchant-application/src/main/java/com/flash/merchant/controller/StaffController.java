@@ -26,7 +26,7 @@ public class StaffController {
     @DeleteMapping("/my/staffs/{id}")
     @ApiOperation("删除某员工")
     @ApiImplicitParam(name = "id", value = "员工id", required = true, dataType = "Long", paramType = "path")
-    public void removeStaff(@PathVariable Long id) {
+    public void removeStaff(@PathVariable("id") Long id) {
         merchantService.removeStaff(id);
     }
 
@@ -36,7 +36,7 @@ public class StaffController {
             @ApiImplicitParam(name = "staff", value = "员工信息,账号和用户名不可修改", required = true, dataType = "StaffDTO", paramType = "body"),
             @ApiImplicitParam(name = "roleCodes", value = "角色编码", allowMultiple = true, dataType = "String", paramType = "query")
     })
-    public void modifyStaff(@RequestBody StaffDto staff, @RequestParam String[] roleCodes) {
+    public void modifyStaff(@RequestBody StaffDto staff, @RequestParam("roleCodes") String[] roleCodes) {
         merchantService.modifyStaff(staff, roleCodes);
     }
 
@@ -45,7 +45,7 @@ public class StaffController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "员工id", dataType = "Long", paramType = "path")
     })
-    public StaffDto queryStaff(@PathVariable Long id) {
+    public StaffDto queryStaff(@PathVariable("id") Long id) {
         Long tenantId = SecurityUtil.getUser().getTenantId();
         return merchantService.queryStaffDetail(id, tenantId);
     }
@@ -56,7 +56,7 @@ public class StaffController {
             @ApiImplicitParam(name = "staff", value = "员工信息", required = true, dataType = "StaffDTO", paramType = "body"),
             @ApiImplicitParam(name = "roleCodes", value = "角色编码", required = true, allowMultiple = true, dataType = "String", paramType = "query")
     })
-    public void createStaffAndAccount(@RequestBody StaffDto staff, @RequestParam String[] roleCodes) {
+    public void createStaffAndAccount(@RequestBody StaffDto staff, @RequestParam("roleCodes") String[] roleCodes) {
         Long merchantId = SecurityUtil.getMerchantId();
         staff.setMerchantId(merchantId);
         merchantService.createStaffAndAccount(staff, roleCodes);
@@ -69,7 +69,7 @@ public class StaffController {
         @ApiImplicitParam(name = "pageNo", value = "页码", required = true, dataType = "int", paramType = "query"),
         @ApiImplicitParam(name = "pageSize", value = "每页记录数", required = true, dataType = "int", paramType = "query")
     })
-    public PageVO<StaffDto> queryStaffByPage(@RequestBody StaffDto staffDto, @RequestParam Integer pageNo, @RequestParam Integer pageSize) {
+    public PageVO<StaffDto> queryStaffByPage(@RequestBody StaffDto staffDto, @RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize) {
         Long merchantId = SecurityUtil.getMerchantId();
         staffDto.setMerchantId(merchantId);
         return merchantService.queryStaffByPage(staffDto, pageNo, pageSize);

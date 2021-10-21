@@ -27,7 +27,7 @@ public class UserController {
     @GetMapping("/my/roles/tenants/{tenantId}")
     @ApiOperation("查询某租户下角色(不包含权限)")
     @ApiImplicitParam(name = "tenantId", value = "租户id", required = true, dataType = "Long", paramType = "path")
-    public List<RoleDTO> queryRole(@PathVariable Long tenantId) {
+    public List<RoleDTO> queryRole(@PathVariable("tenantId") Long tenantId) {
         return authService.queryRole(tenantId);
     }
 }
